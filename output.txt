@@ -1,0 +1,23 @@
+Toxic Comments Perceptron
+
+Training
+iteration- 1  no-of-mistakes= 509  training-accuracy= 0.8982
+iteration- 2  no-of-mistakes= 222  training-accuracy= 0.9556
+iteration- 3  no-of-mistakes= 174  training-accuracy= 0.9652000000000001
+iteration- 4  no-of-mistakes= 131  training-accuracy= 0.9738
+iteration- 5  no-of-mistakes= 134  training-accuracy= 0.9732
+iteration- 6  no-of-mistakes= 91  training-accuracy= 0.9818
+iteration- 7  no-of-mistakes= 102  training-accuracy= 0.9796
+iteration- 8  no-of-mistakes= 101  training-accuracy= 0.9798
+iteration- 9  no-of-mistakes= 74  training-accuracy= 0.9852
+iteration- 10  no-of-mistakes= 73  training-accuracy= 0.9854
+iteration- 11  no-of-mistakes= 75  training-accuracy= 0.985
+iteration- 12  no-of-mistakes= 71  training-accuracy= 0.9858
+iteration- 13  no-of-mistakes= 62  training-accuracy= 0.9876
+iteration- 14  no-of-mistakes= 62  training-accuracy= 0.9876
+iteration- 15  no-of-mistakes= 61  training-accuracy= 0.9878
+iteration- 16  no-of-mistakes= 62  training-accuracy= 0.9876
+iteration- 17  no-of-mistakes= 59  training-accuracy= 0.9882
+iteration- 18  no-of-mistakes= 56  training-accuracy= 0.9888
+iteration- 19  no-of-mistakes= 50  training-accuracy= 0.99
+iteration- 20  no-of-mistakes= 47  training-accuracy= 0.9906

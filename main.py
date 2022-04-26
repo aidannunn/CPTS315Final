@@ -35,17 +35,12 @@ def convertData(data):
 def standardPerceptron(traindata, badWords, f):
 
     ######Preprocessing######
-    traindata, trainlabels = convertData(traindata)
-    ######Form the vocabulary######
+    traindata, trainlabels = convertData(traindata.sample(frac=0.5))
+    ######Build the vocabulary######
     vocabulary = []
     l = len(list(traindata.itertuples()))
     i = 0
     print("Building vocabulary")
-    """ temp = badWords.readline()
-    while(temp): #append each bad word to a list
-        temp = temp.rstrip('\n')
-        vocabulary.append(temp)
-        temp = badWords.readline() """
     printProgressBar(0, l, prefix= 'Progress:', suffix='Complete', length=50) # print initial state of progress bar
     for line in traindata.itertuples():
         temp = line.comment_text
@@ -54,8 +49,8 @@ def standardPerceptron(traindata, badWords, f):
             vocabulary.append(word)
         printProgressBar(i+1, l, prefix= 'Progress:', suffix='Complete', length=50) # update progress bar 
         i+=1
-    vocabulary = list(set(vocabulary))
-    vocabulary.sort()
+    vocabulary = list(set(vocabulary))#remove duplicates
+    vocabulary.sort()#sort the vocabulary
 
 
     ######Convert training data into a list of features######
@@ -67,10 +62,9 @@ def standardPerceptron(traindata, badWords, f):
     for line in traindata.itertuples():
         temp = line.comment_text
         feature = [0]*M
-        temp = temp.split(' ')
+        temp = list(set(temp.split(' ')))
         for word in temp:
-            if word in vocabulary:
-                feature[vocabulary.index(word)] = 1
+            feature[vocabulary.index(word)] = 1
         featuresSet.append(feature)
         printProgressBar(i+1, l, prefix= 'Progress:', suffix='Complete', length=50) # update progress bar 
         i += 1
@@ -80,26 +74,28 @@ def standardPerceptron(traindata, badWords, f):
 
     ######Standard Perceptron######
     w = [0] * M
-    learningRate = 1
+    learningRate = 0.1
     numMistakes = [0]*20
     
     wlen = len(w)
-    flen = len(featuresSet)
     l = 20
+    progress = 0
     print("Creating prediction model")
     printProgressBar(0, l, prefix= 'Progress:', suffix='Complete', length=50) # print initial state of progress bar
-    for itr in range(20):
+    for itr in range(l):
         
         #shuffle training data
-        temp = list(zip(featuresSet, trainlabels))
+        """ temp = list(zip(featuresSet, trainlabels))
         random.shuffle(temp)
         res1, res2 = zip(*temp)
-        featuresSet, trainlabels = list(res1), list(res2)
+        featuresSet, trainlabels = list(res1), list(res2) """
 
-        for i in range(flen): #training example -> (featureSet line = xt, trainlabels number = yt)
+        popSample = random.sample(featuresSet, 4000)
+        plen = len(popSample)
+        for i in range(plen):#range(flen): #training example -> (featureSet line = xt, trainlabels number = yt)
             
             #predict using the current weights
-            temp1 = np.array(featuresSet[i])
+            temp1 = np.array(popSample[i])
             temp2 = np.array(w)
             dotProd = np.dot(temp1, temp2) 
             prediction = np.sign(dotProd)
@@ -108,12 +104,15 @@ def standardPerceptron(traindata, badWords, f):
             if prediction <= 0: 
                 numMistakes[itr] += 1 #increment number of mistakes for the current iteration
                 for j in range(wlen):
-                    w[j] = w[j] + learningRate * (trainlabels[i] - dotProd) * featuresSet[i][j]
-                learningRate += 0.1
-        printProgressBar(itr+1, l, prefix= 'Progress:', suffix='Complete', length=50) # update progress bar
+                    w[j] = w[j] + learningRate * (trainlabels[i] - dotProd) * popSample[i][j]
+                learningRate += 0.01
+            progress += 1
+            printProgressBar(progress+1, l*plen, prefix= 'Progress:', suffix='Complete', length=50) # update progress bar
+
+        #printProgressBar(itr+1, l, prefix= 'Progress:', suffix='Complete', length=50) # update progress bar
 
         numerator = numMistakes[itr]
-        print("iteration-", itr+1, " no-of-mistakes=", numMistakes[itr], " training-accuracy=", 1 - (numerator / len(featuresSet)), file=f)
+        print("iteration-", itr+1, " no-of-mistakes=", numMistakes[itr], " training-accuracy=", 1 - (numerator / len(popSample)), file=f)
 
     return w, vocabulary, f
 
